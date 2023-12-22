@@ -50,6 +50,12 @@ Make sure you have Docker and Docker Compose installed on your system.
 
 9. You can view the results and metrics for Redis and PostgreSQL in the generated Excel file.
 
+10. Once you're done with benchmarking, stop and remove the Docker containers:
+   ```bash
+   docker-compose down
+   ```
+   This will stop and remove the containers while preserving the data generated during the benchmarking process.
+
 ## Notes
 
 - The `postgresFaker.py` script populates the PostgreSQL "users" table with 1000 entries, while `redisFaker.py` inserts 1000 key-value pairs into the Redis database.
