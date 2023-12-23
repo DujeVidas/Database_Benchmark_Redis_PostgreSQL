@@ -11,13 +11,20 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import psutil
 
-NUM_ITERATIONS = 1000
+NUM_ITERATIONS = 100
 
 
-files = [f for f in os.listdir() if os.path.isfile(f)]
+current_directory = os.getcwd()
+excel_directory = os.path.join(current_directory, "sheets")
+if not os.path.exists(excel_directory):
+    os.makedirs(excel_directory)
+
+files = [
+    f
+    for f in os.listdir(excel_directory)
+    if os.path.isfile(os.path.join(excel_directory, f))
+]
 excel_files = [f for f in files if f.endswith(".xlsx")]
-
-
 fake = Faker()
 
 r = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -413,7 +420,7 @@ def write_heavy_transaction_redis(num_writes=10):
     Returns:
         float: The time it took to complete the transaction.
     """
-    
+
     start_time = time.time()
 
     for _ in range(num_writes):
@@ -935,8 +942,10 @@ df_pg_row_load = pd.DataFrame(
 )
 
 
-#Creating an Excel file
-myWorkbook = "database_metrics_{}.xlsx".format(NUM_ITERATIONS)
+# Creating an Excel file
+myWorkbook = os.path.join(
+    excel_directory, "database_metrics_{}.xlsx".format(NUM_ITERATIONS)
+)
 pd.set_option("display.max_colwidth", None)
 
 # Writing to Excel
@@ -984,7 +993,7 @@ with pd.ExcelWriter(myWorkbook) as writer:
 workbook = load_workbook(myWorkbook)
 sheet_averages = workbook["Averages"]
 sheet_medians = workbook["Medians"]
-#Colouring Sheets That Contain Averages and Medians
+# Colouring Sheets That Contain Averages and Medians
 colourSheet(sheet_averages)
 colourSheet(sheet_medians)
 # Expanding Cells to Fit Data
@@ -994,6 +1003,6 @@ for sheet in workbook.sheetnames:
         length = max(len(str(cell.value)) for cell in column_cells)
         ws.column_dimensions[column_cells[0].column_letter].width = length + 2
 
-#Save & Open
+# Save & Open
 workbook.save(myWorkbook)
 os.system('start excel.exe "{}"'.format(myWorkbook))

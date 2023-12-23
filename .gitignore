@@ -1,2 +1,4 @@
-# Ignore Excel files
-*.xlsx
+
+sheets/
+plots/
+generatePlot.py
