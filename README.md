@@ -1,10 +1,10 @@
-Database Benchmarking with PostgreSQL and Redis
+# Database Benchmarking with PostgreSQL and Redis
 
-A benchmarking project comparing the performance characteristics of PostgreSQL and Redis under different database workloads.
+A benchmarking project comparing the performance characteristics of **PostgreSQL** and **Redis** under different database workloads.
 
 The project uses Python to generate synthetic test data, execute automated benchmarks, collect performance metrics, and export the results to Excel for further analysis. The database environment is containerized using Docker Compose.
 
-Technologies
+## Technologies
 
 - Python
 - PostgreSQL
@@ -17,19 +17,19 @@ Technologies
 - OpenPyXL
 - ThreadPoolExecutor
 
-Benchmark Scenarios
+## Benchmark Scenarios
 
 The benchmark evaluates PostgreSQL and Redis under several different workload scenarios:
 
-- Read/Write Workloads – measures read and write throughput in operations per second
-- Key Access Frequency – measures response times under repeated data access
-- Concurrent Operations – executes read and write operations concurrently
-- Row Load Testing – measures response time while querying different amounts of data
-- Read-Heavy Transactions – evaluates performance under repeated read operations
-- Write-Heavy Transactions – evaluates performance under repeated insert operations
-- Transactional Operations – performs combinations of read, insert, and update operations
+- **Read/Write Workloads** – measures read and write throughput in operations per second
+- **Key Access Frequency** – measures response times under repeated data access
+- **Concurrent Operations** – executes read and write operations concurrently
+- **Row Load Testing** – measures response time while querying different amounts of data
+- **Read-Heavy Transactions** – evaluates performance under repeated read operations
+- **Write-Heavy Transactions** – evaluates performance under repeated insert operations
+- **Transactional Operations** – performs combinations of read, insert, and update operations
 
-Performance Metrics
+## Performance Metrics
 
 The benchmark collects and compares:
 
@@ -41,40 +41,40 @@ The benchmark collects and compares:
 - Read-heavy transaction time
 - Write-heavy transaction time
 
-Both average and median values are calculated from the collected measurements.
+Both **average and median values** are calculated from the collected measurements.
 
-How It Works
+## How It Works
 
 1. PostgreSQL and Redis are started in a Docker environment.
-2. "postgresFaker.py" and "redisFaker.py" populate the databases with synthetic user data generated using Faker.
-3. "db_benchmark.py" executes the benchmark scenarios.
+2. `postgresFaker.py` and `redisFaker.py` populate the databases with synthetic user data generated using Faker.
+3. `db_benchmark.py` executes the benchmark scenarios.
 4. Execution times and throughput metrics are collected.
 5. Pandas is used to process the measurements and calculate averages and medians.
 6. Results are automatically exported to an Excel workbook containing separate sheets for each benchmark scenario.
 
-By default, the database population scripts generate 1,000 records for each database. The number of benchmark iterations can be configured in "db_benchmark.py".
+By default, the database population scripts generate **1,000 records** for each database. The number of benchmark iterations can be configured in `db_benchmark.py`.
 
-Results
+## Results
 
 The experiments demonstrate the different performance characteristics of an in-memory key-value store and a relational database.
 
-Under the tested workloads, Redis generally achieved higher throughput and lower response times, particularly for frequent data access and concurrent operations.
+Under the tested workloads, **Redis generally achieved higher throughput and lower response times**, particularly for frequent data access and concurrent operations.
 
 However, raw performance is only one factor when selecting a database. PostgreSQL provides relational data modeling, SQL querying, structured transactions, and persistent storage, while Redis is particularly suitable for scenarios requiring very fast data access, caching, and in-memory operations.
 
-The benchmark therefore illustrates how database selection depends on the application's data model, workload, persistence requirements, query complexity, and transactional requirements.
+The benchmark therefore illustrates how database selection depends on the application's **data model, workload, persistence requirements, query complexity, and transactional requirements**.
 
-Full Report
+## Full Report
 
 A detailed experimental report is available in:
 
-""Report_Eng.pdf"" (Report_Eng.pdf)
+**[Report_Eng.pdf](./Report_Eng.pdf)**
 
 The report contains the complete methodology, system architecture, benchmark scenarios, performance graphs, result analysis, and conclusions.
 
-Running the Benchmark
+## Running the Benchmark
 
-Prerequisites
+### Prerequisites
 
 Make sure you have installed:
 
@@ -84,32 +84,44 @@ Make sure you have installed:
 
 Clone the repository:
 
+```bash
 git clone https://github.com/DujeVidas/Database_Benchmark_Redis_PostgreSQL.git
 cd Database_Benchmark_Redis_PostgreSQL
+```
 
 Install the required Python dependencies:
 
+```bash
 pip install redis psycopg2 pandas faker openpyxl psutil
+```
 
 Start the benchmarking environment:
 
+```bash
 docker-compose up --build
+```
 
 This will create and start the containers required for PostgreSQL, Redis, and the supporting environment.
 
 Once the databases are running, execute:
 
+```bash
 python db_benchmark.py
+```
 
 The benchmark results will be exported to an Excel file:
 
+```text
 database_metrics_<NUM_ITERATIONS>.xlsx
+```
 
 When finished, stop the environment with:
 
+```bash
 docker-compose down
+```
 
-Generated Results
+## Generated Results
 
 The generated Excel workbook contains separate worksheets for:
 
@@ -124,9 +136,10 @@ The generated Excel workbook contains separate worksheets for:
 
 This makes it possible to inspect both individual benchmark runs and aggregated performance metrics.
 
-Project Structure
+## Project Structure
 
-.
+```text
+Database_Benchmark_Redis_PostgreSQL/
 ├── db_benchmark.py
 ├── postgresFaker.py
 ├── redisFaker.py
@@ -136,8 +149,9 @@ Project Structure
 ├── Report_Eng.pdf
 └── sheets/
     └── database_metrics_*.xlsx
+```
 
-Key Takeaways
+## Key Takeaways
 
 This project provided practical experience with:
 
@@ -153,7 +167,7 @@ This project provided practical experience with:
 
 It also demonstrates how different database architectures can perform very differently depending on the workload and why database technology should be selected according to application requirements rather than raw performance alone.
 
-Author
+## Author
 
-Duje Vidas
+**Duje Vidas**  
 University Master of Informatics
