@@ -9,16 +9,17 @@ After executing the inserts, it commits the changes and closes the database conn
 
 import psycopg2
 from faker import Faker
+import os
 
 fake = Faker()
 
 
 conn = psycopg2.connect(
-    dbname='mydatabase',
-    user='dujevidas',
-    password='DVidas123',
-    host='postgres',
-    port='5432'
+    dbname=os.getenv("POSTGRES_DB", "mydatabase"),
+    user=os.getenv("POSTGRES_USER", "dujevidas"),
+    password=os.getenv("POSTGRES_PASSWORD"),
+    host=os.getenv("POSTGRES_HOST", "postgres"),
+    port=os.getenv("POSTGRES_PORT", "5432")
 )
 cur = conn.cursor()
 
