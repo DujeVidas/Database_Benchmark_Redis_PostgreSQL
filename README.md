@@ -88,6 +88,7 @@ Clone the repository:
 git clone https://github.com/DujeVidas/Database_Benchmark_Redis_PostgreSQL.git
 cd Database_Benchmark_Redis_PostgreSQL
 ```
+**Environment Configuration:** Before running the project, copy `.env.example` to `.env` and configure the PostgreSQL credentials. The `.env` file is excluded from Git and should not be committed to the repository.
 
 Install the required Python dependencies:
 
