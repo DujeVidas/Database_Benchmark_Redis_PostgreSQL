@@ -33,11 +33,11 @@ r = redis.StrictRedis(host="localhost", port=6379, db=0)
 connection_pool = pool.SimpleConnectionPool(
     minconn=1,
     maxconn=NUM_ITERATIONS * 10,
-    dbname="mydatabase",
-    user="dujevidas",
-    password="DVidas123",
-    host="localhost",
-    port="5432",
+    dbname=os.getenv("POSTGRES_DB", "mydatabase"),
+    user=os.getenv("POSTGRES_USER", "dujevidas"),
+    password=os.getenv("POSTGRES_PASSWORD"),
+    host=os.getenv("POSTGRES_HOST", "localhost"),
+    port=os.getenv("POSTGRES_PORT", "5432"),
 )
 
 
