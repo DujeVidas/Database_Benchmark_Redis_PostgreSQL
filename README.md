@@ -1,91 +1,159 @@
-# Database Benchmarking with PostgreSQL and Redis
+Database Benchmarking with PostgreSQL and Redis
 
-A database benchmarking project designed to compare the performance of PostgreSQL and Redis under different read and write operations.
+A benchmarking project comparing the performance characteristics of PostgreSQL and Redis under different database workloads.
 
-The project uses Python scripts to generate synthetic test data, populate both databases, execute automated benchmarks, collect performance metrics, and export the results for further analysis.
+The project uses Python to generate synthetic test data, execute automated benchmarks, collect performance metrics, and export the results to Excel for further analysis. The database environment is containerized using Docker Compose.
 
-The entire benchmarking environment is containerized using Docker Compose, making it easy to reproduce and run the tests in a consistent environment.
-
-## Technologies
+Technologies
 
 - Python
 - PostgreSQL
 - Redis
+- Docker & Docker Compose
+- Pandas
+- psycopg2
+- redis-py
+- Faker
+- OpenPyXL
+- ThreadPoolExecutor
+
+Benchmark Scenarios
+
+The benchmark evaluates PostgreSQL and Redis under several different workload scenarios:
+
+- Read/Write Workloads – measures read and write throughput in operations per second
+- Key Access Frequency – measures response times under repeated data access
+- Concurrent Operations – executes read and write operations concurrently
+- Row Load Testing – measures response time while querying different amounts of data
+- Read-Heavy Transactions – evaluates performance under repeated read operations
+- Write-Heavy Transactions – evaluates performance under repeated insert operations
+- Transactional Operations – performs combinations of read, insert, and update operations
+
+Performance Metrics
+
+The benchmark collects and compares:
+
+- Read throughput (ops/sec)
+- Write throughput (ops/sec)
+- Response time
+- Row query time
+- Concurrent operation time
+- Read-heavy transaction time
+- Write-heavy transaction time
+
+Both average and median values are calculated from the collected measurements.
+
+How It Works
+
+1. PostgreSQL and Redis are started in a Docker environment.
+2. "postgresFaker.py" and "redisFaker.py" populate the databases with synthetic user data generated using Faker.
+3. "db_benchmark.py" executes the benchmark scenarios.
+4. Execution times and throughput metrics are collected.
+5. Pandas is used to process the measurements and calculate averages and medians.
+6. Results are automatically exported to an Excel workbook containing separate sheets for each benchmark scenario.
+
+By default, the database population scripts generate 1,000 records for each database. The number of benchmark iterations can be configured in "db_benchmark.py".
+
+Results
+
+The experiments demonstrate the different performance characteristics of an in-memory key-value store and a relational database.
+
+Under the tested workloads, Redis generally achieved higher throughput and lower response times, particularly for frequent data access and concurrent operations.
+
+However, raw performance is only one factor when selecting a database. PostgreSQL provides relational data modeling, SQL querying, structured transactions, and persistent storage, while Redis is particularly suitable for scenarios requiring very fast data access, caching, and in-memory operations.
+
+The benchmark therefore illustrates how database selection depends on the application's data model, workload, persistence requirements, query complexity, and transactional requirements.
+
+Full Report
+
+A detailed experimental report is available in:
+
+""Report_Eng.pdf"" (Report_Eng.pdf)
+
+The report contains the complete methodology, system architecture, benchmark scenarios, performance graphs, result analysis, and conclusions.
+
+Running the Benchmark
+
+Prerequisites
+
+Make sure you have installed:
+
 - Docker
 - Docker Compose
-- SQL
-- Faker
+- Python 3
 
-## Key Features
+Clone the repository:
 
-- Automated generation of synthetic test data
-- PostgreSQL and Redis database population
-- Automated read and write performance benchmarks
-- Performance metric collection
-- Export of benchmark results for analysis
-- Reproducible containerized environment using Docker Compose
+git clone https://github.com/DujeVidas/Database_Benchmark_Redis_PostgreSQL.git
+cd Database_Benchmark_Redis_PostgreSQL
 
----
+Install the required Python dependencies:
 
-## Prerequisites
+pip install redis psycopg2 pandas faker openpyxl psutil
 
-Make sure you have Docker and Docker Compose installed on your system.
+Start the benchmarking environment:
 
-- [Docker Installation Guide](https://docs.docker.com/get-docker/)
-- [Docker Compose Installation Guide](https://docs.docker.com/compose/install/)
+docker-compose up --build
 
+This will create and start the containers required for PostgreSQL, Redis, and the supporting environment.
 
----
+Once the databases are running, execute:
 
-## Running the Benchmark
+python db_benchmark.py
 
-1. Clone this repository to your local machine:
+The benchmark results will be exported to an Excel file:
 
-   ```bash
-   git clone https://github.com/DujeVidas/Database_Benchmark_Redis_PostgreSQL.git
-   ```
+database_metrics_<NUM_ITERATIONS>.xlsx
 
-2. Place the provided files (`Dockerfile`, `docker-compose.yml`, `init.sql`, `postgresFaker.py`, `redisFaker.py`, `db_benchmark.py`) in a directory.
+When finished, stop the environment with:
 
-3. Open a terminal and navigate to the directory containing the files.
+docker-compose down
 
-4. Install the required Python dependencies by running:
+Generated Results
 
-    ```bash
-    pip install redis psycopg2 pandas faker openpyxl psutil
-    ```
+The generated Excel workbook contains separate worksheets for:
 
-5. Run the following command to start the benchmarking environment:
+- averages and medians
+- Redis and PostgreSQL read/write throughput
+- key access frequency
+- row-load response times
+- concurrent operation times
+- read-heavy transactions
+- write-heavy transactions
+- transactional operations
 
-   ```bash
-   docker-compose up --build
-   ```
+This makes it possible to inspect both individual benchmark runs and aggregated performance metrics.
 
-   This command will:
+Project Structure
 
-   - Pull the necessary images (if not available locally)
-   - Build the Python scripts' Docker image
-   - Create and start the containers for PostgreSQL, Redis, and the Python scripts
+.
+├── db_benchmark.py
+├── postgresFaker.py
+├── redisFaker.py
+├── init.sql
+├── Dockerfile
+├── docker-compose.yml
+├── Report_Eng.pdf
+└── sheets/
+    └── database_metrics_*.xlsx
 
-6. Manually initiate the benchmarking process by executing the `db_benchmark.py` script. This Python script performs database operations, simulates read-write scenarios, and generates metrics. You need to run this script separately once the Docker containers are up and running.
+Key Takeaways
 
-7. Wait for the benchmarking process to complete. The Python scripts (`postgresFaker.py` and `redisFaker.py`) will populate the databases with fictitious user data, while the `db_benchmark.py` script will conduct performance measurements.
+This project provided practical experience with:
 
-8. Once the benchmarking process finishes, the generated database metrics will be saved in an Excel file (`database_metrics_<NUM_ITERATIONS>.xlsx`) in the project directory.
+- PostgreSQL and Redis
+- Database performance benchmarking
+- Python database integration
+- Concurrent database operations
+- Performance measurement and analysis
+- Synthetic test-data generation
+- Pandas data processing
+- Docker and Docker Compose
+- Automated Excel report generation
 
-9. You can view the results and metrics for Redis and PostgreSQL in the generated Excel file.
+It also demonstrates how different database architectures can perform very differently depending on the workload and why database technology should be selected according to application requirements rather than raw performance alone.
 
-10. Once you're done with benchmarking, stop and remove the Docker containers:
-   ```bash
-   docker-compose down
-   ```
-   This will stop and remove the containers while preserving the data generated during the benchmarking process.
+Author
 
-## Notes
-
-- The `postgresFaker.py` script populates the PostgreSQL "users" table with 1000 entries, while `redisFaker.py` inserts 1000 key-value pairs into the Redis database.
-- The Faker library generates random user data, including name, address, phone number, date of birth, email, and credit card information.
-- The `init.sql` file contains the SQL schema for creating the "users" table in PostgreSQL.
-- Adjust the number of iterations or the generated data volume by modifying the appropriate variables in the Python scripts (`postgresFaker.py` and `redisFaker.py`).
-- Adjust the number of iterations for the benchmarking process by modifying the NUM_ITERATIONS in the Python script `db_benchmark.py`.
----
+Duje Vidas
+University Master of Informatics
